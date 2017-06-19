@@ -168,8 +168,10 @@ conda update conda
 
 RUN \
 cd /home/$USER_ID/ && \
-wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env.sh && \
-bash create_env.sh
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env_linux_1.sh && \
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env_linux_2.sh && \
+bash create_env_linux_1.sh && \
+bash create_env_linux_2.sh
 
 ################################################################################
 # Postgresql
