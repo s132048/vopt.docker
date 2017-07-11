@@ -4,10 +4,11 @@ MAINTAINER "Joel Kim" joel.kim@veranostech.com
 # Replace sh with bash
 RUN cd /bin && rm sh && ln -s bash sh
 
-# Ubuntu repository
-# ENV REPO http://mirrors.aliyun.com/ubuntu/
+# Ubuntu repository in Korea
 ENV REPO http://kr.archive.ubuntu.com/ubuntu/
 # ENV REPO http://ftp.neowiz.com/ubuntu/
+# in China,
+# ENV REPO http://mirrors.aliyun.com/ubuntu/
 
 RUN \
 echo "deb $REPO xenial main"                                          | tee    /etc/apt/sources.list && \
@@ -45,7 +46,7 @@ echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 echo
 
-# Environment
+# Console colors
 RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /root/.bashrc
 
 ################################################################################
@@ -55,7 +56,7 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 # Ubuntu packages
 RUN \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
+apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial subversion htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
 gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
@@ -67,27 +68,9 @@ default-jre default-jdk \
 && DEBIAN_FRONTEND=noninteractive apt-get autoremove \
 && DEBIAN_FRONTEND=noninteractive apt-get clean
 
-# Redis
-RUN \
-mkdir -p ~/temp && \
-cd ~/temp && \
-wget http://download.redis.io/redis-stable.tar.gz && \
-tar xvzf redis-stable.tar.gz && \
-cd redis-stable && \
-make && \
-make install && \
-mkdir -p /etc/redis && \
-mkdir -p /var/redis && \
-mkdir -p /var/redis/6379 && \
-cp utils/redis_init_script /etc/init.d/redis_6379
-COPY ./6379-docker.conf /etc/redis/6379.conf
-EXPOSE 6379
-
-# make uwsgi log directory
-RUN mkdir /var/log/uwsgi/
 
 ################################################################################
-# add ssh service
+# SSH service
 ################################################################################
 
 RUN \
@@ -105,7 +88,7 @@ echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_dsa_key -C '
 EXPOSE 22
 
 ################################################################################
-# User
+# User Account
 ################################################################################
 
 # Create user
@@ -124,23 +107,10 @@ cp /etc/skel/.profile /home/$USER_ID/.profile && source /home/$USER_ID/.profile 
 chown $USER_ID:$USER_ID /home/$USER_ID/.*  && \
 adduser $USER_ID sudo
 
-################################################################################
-# Python
-################################################################################
-
-# add path to root account
-ENV PATH /home/$USER_ID/anaconda3/bin:$PATH
-
-# Change user to $USER_ID
-USER $USER_ID
-WORKDIR /home/$USER_ID
-ENV HOME /home/$USER_ID
-ENV PATH /home/$USER_ID/anaconda3/bin:$PATH
-
 # login profile
-USER root
 COPY .bash_profile /home/$USER_ID/
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
+
 USER $USER_ID
 RUN \
 echo "export PATH=$PATH:/home/$USER_ID/anaconda3/bin" | tee -a /home/$USER_ID/.bashrc  && \
@@ -149,11 +119,42 @@ echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export TZ='Asia/Seoul'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export TERM='xterm'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc && \
-echo "set input-meta on" >> ~/.inputrc && \
-echo "set output-meta on" >> ~/.inputrc && \
-echo "set convert-meta off" >> ~/.inputrc && \
-echo
+echo "set input-meta on" >> /home/$USER_ID/.inputrc && \
+echo "set output-meta on" >> /home/$USER_ID/.inputrc && \
+echo "set convert-meta off" >> /home/$USER_ID/.inputrc && \
+echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc
+
+
+################################################################################
+# Coiner Optimization Suite
+################################################################################
+
+RUN \
+mkdir -p /temp && cd /temp && \
+svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8 COIN-1.8 && \
+cd COIN-1.8 && \
+./get.AllThirdParty && \
+mkdir build && \
+cd build && \
+../configure --prefix --with-gmpl --enable-gnu-packages && \
+make && \
+make install && \
+rm -rf /temp
+
+
+################################################################################
+# Python
+################################################################################
+
+# add path to root account
+USER root
+ENV PATH /home/$USER_ID/anaconda3/bin:$PATH
+
+# Change user to $USER_ID
+USER $USER_ID
+WORKDIR /home/$USER_ID
+ENV HOME /home/$USER_ID
+ENV PATH /home/$USER_ID/anaconda3/bin:$PATH
 
 # Anaconda3 4.4.0
 ENV ANACONDA Anaconda3-4.4.0-Linux-x86_64.sh
@@ -163,7 +164,8 @@ wget http://repo.continuum.io/archive/$ANACONDA && \
 /bin/bash ~/download/$ANACONDA -b && \
 conda update conda
 
-# Python Packages
+################################################################################
+# Python Packages (vopt.conda environment)
 ################################################################################
 
 RUN \
@@ -174,7 +176,7 @@ bash create_env_linux_1.sh && \
 bash create_env_linux_2.sh
 
 ################################################################################
-# Postgresql
+# PostgreSql
 ################################################################################
 
 USER root
@@ -204,30 +206,32 @@ COPY ./6379-docker.conf /etc/redis/6379.conf
 
 EXPOSE 6379
 
-#################################################################################
-## MongoDb
-#################################################################################
-#
-#USER root
-#RUN \
-#mkdir -p /data/db && \
-#apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 && \
-#echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list && \
-#DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
-#DEBIAN_FRONTEND=noninteractive apt-get install -y -q mongodb-org
-#
-#EXPOSE 27017 28017
-#
-#################################################################################
-## node.js
-#################################################################################
-#
-#USER root
-#RUN \
-#curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
-#/bin/bash nodesource_setup.sh && \
-#DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs npm && \
-#rm -rf nodesource_setup.sh
+################################################################################
+# MongoDb
+################################################################################
+
+USER root
+RUN \
+mkdir -p /data/db && \
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 && \
+echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list && \
+DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q mongodb-org
+
+EXPOSE 27017 28017
+
+
+################################################################################
+# Node.js
+################################################################################
+
+USER root
+RUN \
+curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
+/bin/bash nodesource_setup.sh && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs npm && \
+rm -rf nodesource_setup.sh
+
 
 ################################################################################
 # Supervisor Settings

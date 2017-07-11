@@ -1,14 +1,72 @@
 Docker Images for vopt
 ======================
 
-Build a docker image using one of the following scripts:
+Docker image for vopt Optimization
 
-* `build_linux.sh`
-* `build_mac.sh`
-* `build_windows.sh` (use cygwin or equivalent)
 
-Run the image:
+Prerequisite
+------------
 
-```
-docker run -Pit --name vopt vopt
-```
+* Linux
+
+  Install docker. for example on ubuntu
+  
+  ```
+  $ sudo apt install docker
+  ```
+  
+* Mac/Windows
+
+  Install **docker-toolbox**. 
+  **NOT** docker-for-windows or docker-for-mac.
+  
+  * https://www.docker.com/products/docker-toolbox
+  
+  On windows, you **must include git** when install docker toolbox.
+
+
+Build
+-----
+
+On Linux, the build script just builds a docker image named `vopt`.
+
+On Mac/Windows, the build script creates a new docker-machine named `vopt` 
+and builds a docker image named `vopt` on it.
+
+* Linux
+	```
+	$ source build_linux.sh
+	```
+	
+* Mac
+	```
+	$ source build_mac.sh
+	```
+
+* Windows (in Git-Bash or CygWin)
+	```
+	$ source build_windows.sh
+	```
+	
+
+Run
+---
+
+* Linux
+	```
+	$ docker run -Pit --name vopt vopt
+	```
+	
+* Mac
+	```
+	$ docker-machine start vopt
+	$ eval $(docker-machine env vopt)
+	$ docker run -Pit --name vopt vopt
+	```
+
+* Windows (in Git-Bash or CygWin)
+	```
+	$ docker-machine start vopt
+	$ eval $(docker-machine env vopt)
+	$ docker run -Pit --name vopt vopt
+	```
