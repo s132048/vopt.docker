@@ -65,16 +65,31 @@ uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev l
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
 nginx memcached postgresql postgresql-contrib \
 default-jre default-jdk \
+coinor-clp coinor-libclp-dev coinor-cbc coinor-libcbc-dev coinor-libcoinmp-dev coinor-libcbc-dev coinor-libcgl-dev coinor-csdp coinor-libdylp-dev coinor-libflopc++-dev coinor-libipopt-dev coinor-libosi-dev coinor-libsymphony-dev coinor-libvol-dev coinor-libcoinutils-dev \
 && DEBIAN_FRONTEND=noninteractive apt-get autoremove \
 && DEBIAN_FRONTEND=noninteractive apt-get clean
 
+################################################################################
+# GLPK
+################################################################################
+RUN /
+wget ftp://ftp.gnu.org/gnu/glpk/glpk-4.62.tar.gz && \
+tar -xzvf glpk-4.62.tar.gz && \
+cd glpk-4.62 && \
+./configure && \
+make && \
+make install
+
+ENV GLPK_LIB_DIR /usr/local/lib
+ENV GLPK_INC_DIR=/usr/local/include
+ENV BUILD_GLPK 1
 
 ################################################################################
 # SSH service
 ################################################################################
 
 RUN \
-mkdir /var/run/sshd  && \
+mkdir -p /var/run/sshd  && \
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
@@ -123,23 +138,6 @@ echo "set input-meta on" >> /home/$USER_ID/.inputrc && \
 echo "set output-meta on" >> /home/$USER_ID/.inputrc && \
 echo "set convert-meta off" >> /home/$USER_ID/.inputrc && \
 echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc
-
-
-################################################################################
-# Coiner Optimization Suite
-################################################################################
-
-RUN \
-mkdir -p /temp && cd /temp && \
-svn co http://www.coin-or.org/svn/CoinBinary/OptimizationSuite/stable/1.8 COIN-1.8 && \
-cd COIN-1.8 && \
-./get.AllThirdParty && \
-mkdir build && \
-cd build && \
-../configure --prefix --with-gmpl --enable-gnu-packages && \
-make && \
-make install && \
-rm -rf /temp
 
 
 ################################################################################
@@ -229,8 +227,9 @@ USER root
 RUN \
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs npm && \
-rm -rf nodesource_setup.sh
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
+rm -rf nodesource_setup.sh && \
+npm install npm@latest -g
 
 
 ################################################################################
