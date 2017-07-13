@@ -72,7 +72,7 @@ coinor-clp coinor-libclp-dev coinor-cbc coinor-libcbc-dev coinor-libcoinmp-dev c
 ################################################################################
 # GLPK
 ################################################################################
-RUN /
+RUN \
 wget ftp://ftp.gnu.org/gnu/glpk/glpk-4.62.tar.gz && \
 tar -xzvf glpk-4.62.tar.gz && \
 cd glpk-4.62 && \
