@@ -3,6 +3,8 @@ Docker Images for vopt
 
 Docker image for vopt Optimization
 
+You can download this image from https://hub.docker.com/r/veranostech/vopt/
+
 
 Prerequisite
 ------------
@@ -23,6 +25,17 @@ Prerequisite
   * https://www.docker.com/products/docker-toolbox
   
   On windows, you **must include git** when install docker toolbox.
+
+
+Pull (Download)
+---------------
+
+You can download the pre-built image from docker hub using `docker pull` command.
+
+* Linux, Mac, Windows
+	```
+	$ docker pull veranostech/vopt
+	```
 
 
 Build
