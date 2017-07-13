@@ -54,19 +54,19 @@ Run
 
 * Linux
 	```
-	$ docker run -Pit --name vopt vopt
+	$ docker run -Pit --name vopt veranostech/vopt
 	```
 	
 * Mac
 	```
 	$ docker-machine start vopt
 	$ eval $(docker-machine env vopt)
-	$ docker run -Pit --name vopt vopt
+	$ docker run -Pit --name vopt veranostech/vopt
 	```
 
 * Windows (in Git-Bash or CygWin)
 	```
 	$ docker-machine start vopt
 	$ eval $(docker-machine env vopt)
-	$ docker run -Pit --name vopt vopt
+	$ docker run -Pit --name vopt veranostech/vopt
 	```
