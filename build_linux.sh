@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VM="vopt"
-IMAGE_NAME="vopt"
+IMAGE_NAME="veranostech/vopt"
 
 trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong... Press any key to continue..."' EXIT
 
