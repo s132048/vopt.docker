@@ -44,7 +44,7 @@ Build
 On Linux, the build script just builds a docker image named `vopt`.
 
 On Mac/Windows, the build script creates a new docker-machine named `vopt` 
-and builds a docker image named `vopt` on it.
+and builds a docker image named `veranostech/vopt` on it.
 
 * Linux
 	```
