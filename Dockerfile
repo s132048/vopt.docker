@@ -73,15 +73,18 @@ coinor-clp coinor-libclp-dev coinor-cbc coinor-libcbc-dev coinor-libcoinmp-dev c
 # GLPK
 ################################################################################
 RUN \
+mkdir -p /usr/local/src && \
+cd /usr/local/src && \
 wget ftp://ftp.gnu.org/gnu/glpk/glpk-4.62.tar.gz && \
 tar -xzvf glpk-4.62.tar.gz && \
 cd glpk-4.62 && \
 ./configure && \
 make && \
-make install
+make install && \
+make clean
 
 ENV GLPK_LIB_DIR /usr/local/lib
-ENV GLPK_INC_DIR=/usr/local/include
+ENV GLPK_INC_DIR /usr/local/include
 ENV BUILD_GLPK 1
 
 ################################################################################
