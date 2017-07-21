@@ -9,5 +9,4 @@ service postgresql start
 sudo -u postgres psql postgres -c "create role admin with password 'adminpass'"
 sudo -u postgres psql postgres -f "/home/$USER_ID/.postgres_db_setup.sql"
 
-/bin/bash
-
+sudo -u $USER_ID -i '/bin/bash'
