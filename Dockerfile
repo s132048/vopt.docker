@@ -280,7 +280,6 @@ echo
 ################################################################################
 
 ADD "./.docker-entrypoint.sh" "/home/$USER_ID/"
-ADD "./initfile" "/home/$USER_ID/"
 
 # fix ownership
 USER root
