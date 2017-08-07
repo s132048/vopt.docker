@@ -187,10 +187,10 @@ conda update conda
 
 RUN \
 cd /home/$USER_ID/ && \
-wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env_linux_1_create_env.sh && \
-wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env_linux_2_install_pkg.sh && \
-bash create_env_linux_1_create_env.sh && \
-bash create_env_linux_2_install_pkg.sh
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env.sh && \
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_pkg.sh && \
+bash create_env.sh && \
+bash install_pkg.sh
 
 ################################################################################
 # PostgreSql
@@ -286,6 +286,7 @@ USER root
 
 RUN \
 chown syslog:syslog /etc/rsyslog.conf && \
+chown $USER_ID:$USER_ID /home/$USER_ID && \
 chown $USER_ID:$USER_ID /home/$USER_ID/.*  && \
 chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
 echo

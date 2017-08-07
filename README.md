@@ -1,5 +1,5 @@
-Docker Images for vopt
-======================
+Docker Image for vopt
+=====================
 
 Docker image for vopt Optimization
 
