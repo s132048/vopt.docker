@@ -190,7 +190,8 @@ cd /home/$USER_ID/ && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env.sh && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_pkg.sh && \
 bash create_env.sh && \
-bash install_pkg.sh
+bash install_pkg.sh && \
+echo ""
 
 ################################################################################
 # PostgreSql
