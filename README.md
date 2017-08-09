@@ -70,7 +70,7 @@ and builds a docker image named `veranostech/vopt` on it.
 	$ source build_mac.sh
 	```
 
-* Windows (in Git-Bash or CygWin)
+* Windows (in Docker Quickstart Terminal)
 	```
 	$ source build_windows.sh
 	```
@@ -81,19 +81,19 @@ Run
 
 * Linux
 	```
-	$ docker run -Pit --name vopt veranostech/vopt
+	$ docker run --name vopt --rm -Pit veranostech/vopt
 	```
-	
+
 * Mac
 	```
 	$ docker-machine start vopt
 	$ eval $(docker-machine env vopt)
-	$ docker run -Pit --name vopt veranostech/vopt
+	$ docker run --name vopt --rm -Pit veranostech/vopt
 	```
 
 * Windows (in Docker Quickstart Terminal)
 	```
 	$ docker-machine start vopt
 	$ eval $(docker-machine env vopt)
-	$ docker run -Pit --name vopt veranostech/vopt
+	$ docker run --name vopt --rm -Pit veranostech/vopt
 	```
