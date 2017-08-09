@@ -27,12 +27,26 @@ Prerequisite
   On windows, you **must include git** when install docker toolbox.
 
 
+
+
 Pull (Download)
 ---------------
 
 You can download the pre-built image from docker hub using `docker pull` command.
 
-* Linux, Mac, Windows
+
+1. Create a separated docker machine named `vopt`
+	```
+	$ docker-machine create -d virtualbox vopt
+	```
+
+2. Start the docker-machine `vopt`
+	```
+	$ docker-machine start vopt
+	$ eval $(docker-machine env vopt)
+	```
+
+3. Download docker image
 	```
 	$ docker pull veranostech/vopt
 	```
@@ -77,7 +91,7 @@ Run
 	$ docker run -Pit --name vopt veranostech/vopt
 	```
 
-* Windows (in Git-Bash or CygWin)
+* Windows (in Docker Quickstart Terminal)
 	```
 	$ docker-machine start vopt
 	$ eval $(docker-machine env vopt)
