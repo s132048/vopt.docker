@@ -56,16 +56,21 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 # Ubuntu packages
 RUN \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial subversion htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
-gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config \
-software-properties-common supervisor \
-libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
-libgoogle-glog-dev libprotobuf-dev protobuf-compiler libgflags-dev libgtest-dev libiomp-dev libleveldb-dev liblmdb-dev \
-uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libopencv-dev libtiff5-dev libevent-dev \
-openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
-nginx memcached postgresql postgresql-contrib \
+apt-file gdebi-core software-properties-common pkg-config \
+sudo man htop ncdu dos2unix \
+ed emacs24 vim tmux screen zip unzip bzip2 git mercurial subversion curl wget \
+net-tools openssl apparmor \
+build-essential autoconf automake cmake make gfortran gettext libtool swig uuid-dev \
 default-jre default-jdk \
-coinor-clp coinor-libclp-dev coinor-cbc coinor-libcbc-dev coinor-libcoinmp-dev coinor-libcgl-dev coinor-csdp coinor-libdylp-dev coinor-libflopc++-dev coinor-libipopt-dev coinor-libosi-dev coinor-libsymphony-dev coinor-libvol-dev coinor-libcoinutils-dev \
+nginx memcached openssh-server postgresql postgresql-contrib rsyslog supervisor \
+libatlas-base-dev libboost-all-dev libclang1 libclang-dev libgflags-dev libgtest-dev \
+libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev \
+libgoogle-glog-dev libprotobuf-dev protobuf-compiler libiomp-dev libleveldb-dev \
+liblmdb-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libopencv-dev \
+libtiff5-dev libevent-dev libapparmor1 libssh2-1-dev libssl-dev libgl1-mesa-glx \
+coinor-clp coinor-libclp-dev coinor-cbc coinor-csdp coinor-libcbc-dev coinor-libcoinmp-dev \
+coinor-libcgl-dev coinor-libdylp-dev coinor-libflopc++-dev coinor-libipopt-dev \
+coinor-libosi-dev coinor-libsymphony-dev coinor-libvol-dev coinor-libcoinutils-dev \
 && DEBIAN_FRONTEND=noninteractive apt-get autoremove \
 && DEBIAN_FRONTEND=noninteractive apt-get clean
 
@@ -75,16 +80,16 @@ coinor-clp coinor-libclp-dev coinor-cbc coinor-libcbc-dev coinor-libcoinmp-dev c
 RUN \
 mkdir -p /usr/local/src && \
 cd /usr/local/src && \
-wget https://www.coin-or.org/download/source/Cbc/Cbc-2.9.9.tgz && \
-tar -xzvf Cbc-2.9.9.tgz && \
-cd Cbc-2.9.9 && \
+wget https://www.coin-or.org/download/source/Cbc/Cbc-2.8.9.tgz && \
+tar -xzvf Cbc-2.8.9.tgz && \
+cd Cbc-2.8.9 && \
 ./configure && \
 make && \
 make install && \
 make clean
 
-ENV COIN_INSTALL_DIR /usr/local/src/Cbc-2.9.9
-ENV LD_LIBRARY_PATH "/usr/local/src/Cbc-2.9.9/lib:$LD_LIBRARY_PATH"
+ENV COIN_INSTALL_DIR /usr/local/src/Cbc-2.8.9
+ENV LD_LIBRARY_PATH "/usr/local/src/Cbc-2.8.9/lib:$LD_LIBRARY_PATH"
 
 ################################################################################
 # GLPK
@@ -267,8 +272,8 @@ chown $USER_ID:$USER_ID /var/log/supervisor
 
 USER $USER_ID
 RUN \
-echo "export COIN_INSTALL_DIR=/usr/local/src/Cbc-2.9.9" | tee -a /home/$USER_ID/.bashrc && \
-echo "export LD_LIBRARY_PATH=\"/usr/local/src/Cbc-2.9.9/lib:$LD_LIBRARY_PATH\"" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export COIN_INSTALL_DIR=/usr/local/src/Cbc-2.8.9" | tee -a /home/$USER_ID/.bashrc && \
+echo "export LD_LIBRARY_PATH=\"/usr/local/src/Cbc-2.8.9/lib:$LD_LIBRARY_PATH\"" | tee -a /home/$USER_ID/.bashrc  && \
 echo
 
 
