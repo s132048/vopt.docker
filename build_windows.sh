@@ -3,13 +3,15 @@
 VM="vopt"
 IMAGE_NAME="veranostech/vopt"
 
-trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong... Press any key to continue..."' EXIT
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+
+trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong... Press any key to continue..."' return
 
 # for windows with docker toolbox
 # =====================================================================================================================
 
-cd /D %~dp0
-dos2unix.exe ./.docker-entrypoint.sh ./6379-docker.conf ./postgres_db_setup.sql
+dos2unix.exe ./.docker-entrypoint.sh ./6379-docker.conf ./supervisord.conf
 
 DOCKER_MACHINE="/c/Program Files/Docker Toolbox/docker-machine.exe"
 
@@ -21,7 +23,7 @@ fi
 
 if [ ! -f "${DOCKER_MACHINE}" ] || [ ! -f "${VBOXMANAGE}" ]; then
   echo "Either VirtualBox or Docker Machine are not installed. Please re-run the Toolbox Installer and try again."
-  exit 1
+  return 1
 fi
 
 "${VBOXMANAGE}" list vms | grep \""${VM}"\" &> /dev/null
