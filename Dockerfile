@@ -56,7 +56,9 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 RUN \
 cd /home/$USER_ID/ && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_lib_ubuntu.sh && \
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_lib_optimizer.sh && \
 /bin/bash install_lib_ubuntu.sh && \
+/bin/bash install_lib_optimizer.sh && \
 echo ""
 
 ################################################################################
