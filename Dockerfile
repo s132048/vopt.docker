@@ -180,7 +180,7 @@ WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
 ENV PATH $ANACONDA_PATH/bin:$PATH
 RUN \
-echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc
 
 # Anaconda install
 RUN \
@@ -198,6 +198,7 @@ conda update --all
 RUN \
 cd /home/$USER_ID/ && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env.sh && \
+wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/py3_ortools-6.4.4495-cp35-cp35m-manylinux1_x86_64.whl && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_pkg.sh && \
 bash create_env.sh && \
 bash install_pkg.sh && \
