@@ -173,7 +173,9 @@ curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \
-npm install npm@latest -g
+npm install -g npm@latest && \
+npm install -g --unsafe-perm ijavascript && \
+echo ""
 
 ################################################################################
 # Python
@@ -181,7 +183,7 @@ npm install npm@latest -g
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.0.0-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-5.0.1-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
