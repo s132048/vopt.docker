@@ -57,9 +57,7 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 RUN \
 cd /home/$USER_ID/ && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_lib_ubuntu.sh && \
-wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_lib_optimizer.sh && \
 /bin/bash install_lib_ubuntu.sh && \
-/bin/bash install_lib_optimizer.sh && \
 echo ""
 
 ################################################################################
@@ -212,7 +210,6 @@ conda update --all
 RUN \
 cd /home/$USER_ID/ && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/create_env.sh && \
-wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/py3_ortools-6.4.4495-cp35-cp35m-manylinux1_x86_64.whl && \
 wget https://raw.githubusercontent.com/VeranosTech/vopt.conda/master/install_pkg.sh && \
 bash create_env.sh && \
 bash install_pkg.sh && \
