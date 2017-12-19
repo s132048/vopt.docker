@@ -242,7 +242,6 @@ RUN \
 chown syslog:syslog /etc/rsyslog.conf && \
 chown $USER_ID:$USER_ID /home/$USER_ID/.*  && \
 chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
-chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 echo ""
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
