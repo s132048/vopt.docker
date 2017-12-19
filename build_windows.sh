@@ -11,7 +11,7 @@ trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong... Press any ke
 # for windows with docker toolbox
 # =====================================================================================================================
 
-dos2unix.exe ./.docker-entrypoint.sh ./6379-docker.conf ./supervisord.conf
+dos2unix.exe ./.bash_profile ./.docker-entrypoint.sh ./6379-docker.conf ./supervisord.conf
 
 DOCKER_MACHINE="/c/Program Files/Docker Toolbox/docker-machine.exe"
 
