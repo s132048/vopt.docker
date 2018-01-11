@@ -27,6 +27,12 @@ Prerequisite
   On windows, you **must include git** when install docker toolbox.
 
 
+Virtual Machine
+---------------
+
+The installation script creates a new VirtualBox machine named **"vopt"** 
+when you use Docker-Toolbox on Mac/Windows.
+Check the ip address of the **"vopt"** machine using ``docker-machine ls`` before connect the docker container.
 
 
 Pull (Download)
