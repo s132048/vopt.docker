@@ -16,90 +16,78 @@ Prerequisite
   ```
   $ sudo apt install docker
   ```
-  
-* Mac/Windows
 
-  Install **docker-toolbox**. 
-  **NOT** docker-for-windows or docker-for-mac.
-  
-  * https://www.docker.com/products/docker-toolbox
+* Mac with **Docker for Mac**
+
+  * https://store.docker.com/editions/community/docker-ce-desktop-mac
+
+* Windows with **Docker for Windows**
+
+  * https://store.docker.com/editions/community/docker-ce-desktop-windows
+
+* Mac/Windows with Docker-Toolbox
+
+  * https://docs.docker.com/toolbox/overview/
   
   On windows, you **must include git** when install docker toolbox.
-
-
-Virtual Machine
----------------
-
-The installation script creates a new VirtualBox machine named **"vopt"** 
-when you use Docker-Toolbox on Mac/Windows.
-Check the ip address of the **"vopt"** machine using ``docker-machine ls`` before connect the docker container.
+  
+  The installation script creates a new VirtualBox machine named **"vopt"** 
+  when you use Docker-Toolbox on Mac/Windows.
+  Check the ip address of the **"vopt"** machine using ``docker-machine ls`` before connect the docker container.
 
 
 Pull (Download)
 ---------------
 
 You can download the pre-built image from docker hub using `docker pull` command.
-
-
-1. Create a separated docker machine named `vopt`
-	```
-	$ docker-machine create -d virtualbox vopt
-	```
-
-2. Start the docker-machine `vopt`
-	```
-	$ docker-machine start vopt
-	$ eval $(docker-machine env vopt)
-	```
-
-3. Download docker image
-	```
-	$ docker pull veranostech/vopt
-	```
+```
+$ docker pull veranostech/vopt
+```
 
 
 Build
 -----
 
-On Linux, the build script just builds a docker image named `vopt`.
+On Linux, Mac with Docker for Mac, or Windows with Docker for Windows, 
+the build script just builds a docker image named `vopt`.
 
-On Mac/Windows, the build script creates a new docker-machine named `vopt` 
+On Mac/Windows with Docker-Toolbox, the build script creates a new docker-machine named `vopt` 
 and builds a docker image named `veranostech/vopt` on it.
 
-* Linux
-	```
-	$ source build_linux.sh
-	```
-	
-* Mac
-	```
-	$ source build_mac.sh
-	```
+* Linux, Mac with Docker for Mac, or Windows with Docker for Windows
+  ```
+  $ source build.sh
+  ```
+  
+* Mac with Docker Toolbox
+  ```
+  $ source build_dockertoolbox_mac.sh
+  ```
 
-* Windows (in Docker Quickstart Terminal)
-	```
-	$ source build_windows.sh
-	```
-	
+* Windows with Docker Toolbox (in Docker Quickstart Terminal)
+  ```
+  $ source build_dockertoolbox_windows.sh
+  ```
+  
 
 Run
 ---
 
-* Linux
-	```
-	$ docker run --name vopt --rm -Pit veranostech/vopt
-	```
+* Linux, Mac with Docker for Mac, or Windows with Docker for Windows
+  ```
+  $ docker run --name vopt --rm -Pit -p 8222:22 veranostech/vopt
+  ```
 
-* Mac
-	```
-	$ docker-machine start vopt
-	$ eval $(docker-machine env vopt)
-	$ docker run --name vopt --rm -Pit veranostech/vopt
-	```
+* Mac with Docker Toolbox
+  ```
+  $ docker-machine start vopt
+  $ eval $(docker-machine env vopt)
+  $ docker run --name vopt --rm -Pit -p 8222:22 veranostech/vopt
+  ```
 
-* Windows (in Docker Quickstart Terminal)
-	```
-	$ docker-machine start vopt
-	$ eval $(docker-machine env vopt)
-	$ docker run --name vopt --rm -Pit veranostech/vopt
-	```
+* Windows with Docker Toolbox (in Docker Quickstart Terminal)
+  ```
+  $ docker-machine start vopt
+  $ eval $(docker-machine env vopt)
+  $ docker run --name vopt --rm -Pit -p 8222:22 veranostech/vopt
+  ```
