@@ -203,12 +203,6 @@ conda update conda && \
 conda update anaconda && \
 conda update --all
 
-# temporary conda bug patch until conda 4.4.11 is released.
-RUN \
-mkdir -p ~/download && cd ~/download && \
-wget https://patch-diff.githubusercontent.com/raw/conda/conda/pull/6867.diff && \
-patch $ANACONDA_PATH/lib/python3.6/site-packages/conda/gateways/disk/update.py < 6867.diff
-
 ################################################################################
 # Python Packages
 ################################################################################
